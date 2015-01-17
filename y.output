@@ -1,0 +1,283 @@
+
+state 0
+	$accept: .Start $end 
+
+	STRING  shift 7
+	IDENT  shift 8
+	'{'  shift 10
+	'('  shift 9
+	'<'  shift 11
+	.  error
+
+	Dict  goto 5
+	String  goto 3
+	Array  goto 4
+	Value  goto 2
+	Data  goto 6
+	Start  goto 1
+
+state 1
+	$accept:  Start.$end 
+
+	$end  accept
+	.  error
+
+
+state 2
+	Start:  Value.    (1)
+
+	.  reduce 1 (src line 40)
+
+
+state 3
+	Value:  String.    (2)
+
+	.  reduce 2 (src line 45)
+
+
+state 4
+	Value:  Array.    (3)
+
+	.  reduce 3 (src line 48)
+
+
+state 5
+	Value:  Dict.    (4)
+
+	.  reduce 4 (src line 51)
+
+
+state 6
+	Value:  Data.    (5)
+
+	.  reduce 5 (src line 54)
+
+
+state 7
+	String:  STRING.    (6)
+
+	.  reduce 6 (src line 59)
+
+
+state 8
+	String:  IDENT.    (7)
+
+	.  reduce 7 (src line 65)
+
+
+state 9
+	Array:  '('.')' 
+	Array:  '('.ArrayElements ')' 
+
+	STRING  shift 7
+	IDENT  shift 8
+	'{'  shift 10
+	'('  shift 9
+	')'  shift 12
+	'<'  shift 11
+	.  error
+
+	Dict  goto 5
+	String  goto 3
+	Array  goto 4
+	ArrayElements  goto 13
+	Value  goto 15
+	ArrayElement  goto 14
+	Data  goto 6
+
+state 10
+	Dict:  '{'.'}' 
+	Dict:  '{'.Pairs '}' 
+
+	STRING  shift 7
+	IDENT  shift 8
+	'}'  shift 16
+	.  error
+
+	Pair  goto 18
+	Pairs  goto 17
+	String  goto 19
+
+state 11
+	Data:  '<'.DataChunks '>' 
+
+	IDENT  shift 22
+	.  error
+
+	DataChunks  goto 20
+	DataChunk  goto 21
+
+state 12
+	Array:  '(' ')'.    (8)
+
+	.  reduce 8 (src line 69)
+
+
+state 13
+	Array:  '(' ArrayElements.')' 
+	ArrayElements:  ArrayElements.ArrayElement 
+
+	STRING  shift 7
+	IDENT  shift 8
+	'{'  shift 10
+	'('  shift 9
+	')'  shift 23
+	'<'  shift 11
+	.  error
+
+	Dict  goto 5
+	String  goto 3
+	Array  goto 4
+	Value  goto 15
+	ArrayElement  goto 24
+	Data  goto 6
+
+state 14
+	ArrayElements:  ArrayElement.    (10)
+
+	.  reduce 10 (src line 77)
+
+
+state 15
+	ArrayElement:  Value.',' 
+
+	','  shift 25
+	.  error
+
+
+state 16
+	Dict:  '{' '}'.    (13)
+
+	.  reduce 13 (src line 90)
+
+
+state 17
+	Dict:  '{' Pairs.'}' 
+	Pairs:  Pairs.Pair 
+
+	STRING  shift 7
+	IDENT  shift 8
+	'}'  shift 26
+	.  error
+
+	Pair  goto 27
+	String  goto 19
+
+state 18
+	Pairs:  Pair.    (15)
+
+	.  reduce 15 (src line 98)
+
+
+state 19
+	Pair:  String.'=' Value ';' 
+
+	'='  shift 28
+	.  error
+
+
+state 20
+	Data:  '<' DataChunks.'>' 
+	DataChunks:  DataChunks.DataChunk 
+
+	IDENT  shift 22
+	'>'  shift 29
+	.  error
+
+	DataChunk  goto 30
+
+state 21
+	DataChunks:  DataChunk.    (20)
+
+	.  reduce 20 (src line 126)
+
+
+state 22
+	DataChunk:  IDENT.    (19)
+
+	.  reduce 19 (src line 115)
+
+
+state 23
+	Array:  '(' ArrayElements ')'.    (9)
+
+	.  reduce 9 (src line 72)
+
+
+state 24
+	ArrayElements:  ArrayElements ArrayElement.    (11)
+
+	.  reduce 11 (src line 80)
+
+
+state 25
+	ArrayElement:  Value ','.    (12)
+
+	.  reduce 12 (src line 85)
+
+
+state 26
+	Dict:  '{' Pairs '}'.    (14)
+
+	.  reduce 14 (src line 93)
+
+
+state 27
+	Pairs:  Pairs Pair.    (16)
+
+	.  reduce 16 (src line 101)
+
+
+state 28
+	Pair:  String '='.Value ';' 
+
+	STRING  shift 7
+	IDENT  shift 8
+	'{'  shift 10
+	'('  shift 9
+	'<'  shift 11
+	.  error
+
+	Dict  goto 5
+	String  goto 3
+	Array  goto 4
+	Value  goto 31
+	Data  goto 6
+
+state 29
+	Data:  '<' DataChunks '>'.    (18)
+
+	.  reduce 18 (src line 111)
+
+
+state 30
+	DataChunks:  DataChunks DataChunk.    (21)
+
+	.  reduce 21 (src line 129)
+
+
+state 31
+	Pair:  String '=' Value.';' 
+
+	';'  shift 32
+	.  error
+
+
+state 32
+	Pair:  String '=' Value ';'.    (17)
+
+	.  reduce 17 (src line 106)
+
+
+14 terminals, 13 nonterminals
+22 grammar rules, 33/2000 states
+0 shift/reduce, 0 reduce/reduce conflicts reported
+62 working sets used
+memory: parser 38/30000
+17 extra closures
+34 shift entries, 1 exceptions
+19 goto entries
+13 entries saved by goto default
+Optimizer space used: output 48/30000
+48 table entries, 0 zero
+maximum spread: 14, maximum offset: 28

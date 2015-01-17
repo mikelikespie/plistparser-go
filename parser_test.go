@@ -20,13 +20,13 @@ func TestParse(t *testing.T) {
 }
 
 func TestSlashes(t *testing.T) {
-	r, err := ParseString(`/abc`)
+	r, err := ParseString(`/ab/c`)
 	if err != nil {
 		t.Fatalf("Should have parsed, but got error %s", err)
 	}
 	switch r := r.(type) {
 	case string:
-		if r != `/abc` {
+		if r != `/ab/c` {
 			t.Errorf("expected valid string parse")
 		}
 	default:

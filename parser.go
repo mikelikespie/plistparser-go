@@ -26,6 +26,10 @@ func isIdent(ch rune, i int) bool {
 
 	}
 
+	if i > 1 && ch == '/' {
+		return true
+	}
+
 	return false
 }
 

@@ -1,10 +1,10 @@
 package plistparser
 
 import (
+	"bytes"
 	"fmt"
 	"io"
 	"log"
-	"os"
 	"strconv"
 	"text/scanner"
 )
@@ -26,16 +26,13 @@ func isIdent(ch rune, i int) bool {
 
 	}
 
-	if i > 0 && ch == '/' {
-		return true
-	}
-
 	return false
 }
 
 type lexer struct {
 	s      scanner.Scanner
 	inData bool
+	err    error
 	result interface{}
 }
 
@@ -72,8 +69,7 @@ func (l *lexer) Lex(lval *yySymType) (tok int) {
 		case '/':
 			accumulatedText += "/"
 			peeked := l.s.Peek()
-
-			if isIdent(peeked, 1) {
+			if peeked == '/' || isIdent(peeked, 1) {
 				continue
 			} else {
 				tok = IDENT
@@ -95,8 +91,8 @@ func (l *lexer) Lex(lval *yySymType) (tok int) {
 }
 
 func prettyPrint(v interface{}, indentLevel int) {
-	printIndent := func (delta int) {
-		for i := 0; i < indentLevel + delta; i++ {
+	printIndent := func(delta int) {
+		for i := 0; i < indentLevel+delta; i++ {
 			fmt.Printf("  ")
 		}
 	}
@@ -108,7 +104,7 @@ func prettyPrint(v interface{}, indentLevel int) {
 		for _, val := range v {
 			printIndent(1)
 
-			prettyPrint(val, indentLevel + 1)
+			prettyPrint(val, indentLevel+1)
 			fmt.Printf(",\n")
 		}
 		printIndent(0)
@@ -118,9 +114,9 @@ func prettyPrint(v interface{}, indentLevel int) {
 		fmt.Printf("{\n")
 		for k, val := range v {
 			printIndent(1)
-			prettyPrint(k, indentLevel + 1)
+			prettyPrint(k, indentLevel+1)
 			fmt.Printf(" = ")
-			prettyPrint(val, indentLevel + 1)
+			prettyPrint(val, indentLevel+1)
 			fmt.Printf(";\n")
 		}
 		printIndent(0)
@@ -130,13 +126,22 @@ func prettyPrint(v interface{}, indentLevel int) {
 
 	}
 }
-func (l *lexer) Error(e string) {
-	log.Panicf("%d:%d: %s last token text %s", l.s.Line, l.s.Column, e, l.s.TokenText())
+
+func PrettyPrint(v interface{}) {
+	prettyPrint(v, 0)
 }
 
-func main() {
-	l := newLexer(os.Stdin)
-	yyParse(l)
+func (l *lexer) Error(e string) {
+	l.result = nil
+	l.err = fmt.Errorf("%d:%d: %s. last token text: '%s'", l.s.Line, l.s.Column, e, l.s.TokenText())
+}
 
-	prettyPrint(l.result, 0)
+func Parse(rdr io.Reader) (result interface{}, err error) {
+	l := newLexer(rdr)
+	yyParse(l)
+	return l.result, l.err
+}
+
+func ParseString(str string) (result interface{}, err error) {
+	return Parse(bytes.NewBufferString(str))
 }

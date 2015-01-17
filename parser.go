@@ -1,4 +1,4 @@
-package main
+package plistparser
 
 import (
 	"fmt"
@@ -121,7 +121,7 @@ func prettyPrint(v interface{}, indentLevel int) {
 			prettyPrint(k, indentLevel + 1)
 			fmt.Printf(" = ")
 			prettyPrint(val, indentLevel + 1)
-			fmt.Printf(",\n")
+			fmt.Printf(";\n")
 		}
 		printIndent(0)
 		fmt.Printf("}")

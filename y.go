@@ -1,5 +1,5 @@
 //line gram.y:2
-package main
+package plistparser
 
 import __yyfmt__ "fmt"
 

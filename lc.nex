@@ -1,21 +1,25 @@
 <      { println("BEGIN") }
 
-  /\/\*([^*]|\*[^\/])*\*\//  {println ("Comment Begin", yylex.Text()) }
+  /\/\/[^\n]*/  {println ("Comment2", yylex.Text()) }
+  /\/\*([^*]|\*[^\/])*\*\//  {println ("Comment1", yylex.Text()) }
   /\"(\\.|[^\\"])*\"/ 	     {println ("String Literal", yylex.Text()) }
-  /([a-zA-Z0-9_$]|\\[fnrt])*/ 	     {println ("String Literal2", yylex.Text()) }
+  /([a-zA-Z0-9_$.\/]|\\[fnrt])*/ 	     {println ("String Literal2", yylex.Text()) }
 
   /\(/   {println ("Array Start") }
   /\)/   {println ("Array End", yylex.Text()) }
+  /,/    {println ("Array separator") }
+
   /\"/   {println ("Quotation Mark", yylex.Text()) }
   /=/    {println ("Dictionary Element Equals") }
   /{/    {println ("Dictionary Start") }
   /}/    {println ("Dictionary End") }
   /;/    {println ("Dictionary Element End") }
-  /a/  { println("a") }
+  /[ \t\n]/  { println("Whitespace") }
+  /.+/  { log.Panicf("Unexpected token: '%s' at line %d column %d", yylex.Text(), yylex.Line(), yylex.Column()) }
 >      { println("END") }
 //
 package main
-import ("fmt";"os")
+import ("fmt";"os"; "log")
 type yySymType struct { l, c int }
 
 

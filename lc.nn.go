@@ -153,6 +153,38 @@ dollar:  // Handle $.
     ch <- frame{-1, "", line, column}
   }
   go scan(bufio.NewReader(in), yylex.ch, []dfa{
+// \/\/[^\n]*
+{[]bool{false, false, true, true}, []func(rune) int{  // Transitions
+func(r rune) int {
+	switch(r) {
+		case 10: return -1
+		case 47: return 1
+	}
+	return -1
+},
+func(r rune) int {
+	switch(r) {
+		case 10: return -1
+		case 47: return 2
+	}
+	return -1
+},
+func(r rune) int {
+	switch(r) {
+		case 10: return -1
+		case 47: return 3
+	}
+	return 3
+},
+func(r rune) int {
+	switch(r) {
+		case 10: return -1
+		case 47: return 3
+	}
+	return 3
+},
+}, []int{  /* Start-of-input transitions */  -1, -1, -1, -1,}, []int{  /* End-of-input transitions */  -1, -1, -1, -1,},nil},
+
 // \/\*([^*]|\*[^\/])*\*\/
 {[]bool{false, false, false, false, false, true, false}, []func(rune) int{  // Transitions
 func(r rune) int {
@@ -252,11 +284,13 @@ func(r rune) int {
 },
 }, []int{  /* Start-of-input transitions */  -1, -1, -1, -1, -1, -1,}, []int{  /* End-of-input transitions */  -1, -1, -1, -1, -1, -1,},nil},
 
-// ([a-zA-Z0-9_$]|\\[fnrt])*
+// ([a-zA-Z0-9_$.\/]|\\[fnrt])*
 {[]bool{true, true, false, true}, []func(rune) int{  // Transitions
 func(r rune) int {
 	switch(r) {
 		case 36: return 1
+		case 46: return 1
+		case 47: return 1
 		case 92: return 2
 		case 95: return 1
 		case 102: return 1
@@ -265,15 +299,17 @@ func(r rune) int {
 		case 116: return 1
 	}
 	switch {
-		case 48 <= r && r <= 57: return 1
 		case 65 <= r && r <= 90: return 1
 		case 97 <= r && r <= 122: return 1
+		case 48 <= r && r <= 57: return 1
 	}
 	return -1
 },
 func(r rune) int {
 	switch(r) {
 		case 36: return 1
+		case 46: return 1
+		case 47: return 1
 		case 92: return 2
 		case 95: return 1
 		case 102: return 1
@@ -282,8 +318,8 @@ func(r rune) int {
 		case 116: return 1
 	}
 	switch {
-		case 97 <= r && r <= 122: return 1
 		case 65 <= r && r <= 90: return 1
+		case 97 <= r && r <= 122: return 1
 		case 48 <= r && r <= 57: return 1
 	}
 	return -1
@@ -291,6 +327,8 @@ func(r rune) int {
 func(r rune) int {
 	switch(r) {
 		case 36: return -1
+		case 46: return -1
+		case 47: return -1
 		case 92: return -1
 		case 95: return -1
 		case 102: return 3
@@ -299,8 +337,8 @@ func(r rune) int {
 		case 116: return 3
 	}
 	switch {
-		case 65 <= r && r <= 90: return -1
 		case 97 <= r && r <= 122: return -1
+		case 65 <= r && r <= 90: return -1
 		case 48 <= r && r <= 57: return -1
 	}
 	return -1
@@ -308,6 +346,8 @@ func(r rune) int {
 func(r rune) int {
 	switch(r) {
 		case 36: return 1
+		case 46: return 1
+		case 47: return 1
 		case 92: return 2
 		case 95: return 1
 		case 102: return 1
@@ -316,9 +356,9 @@ func(r rune) int {
 		case 116: return 1
 	}
 	switch {
+		case 97 <= r && r <= 122: return 1
 		case 65 <= r && r <= 90: return 1
 		case 48 <= r && r <= 57: return 1
-		case 97 <= r && r <= 122: return 1
 	}
 	return -1
 },
@@ -351,6 +391,22 @@ func(r rune) int {
 func(r rune) int {
 	switch(r) {
 		case 41: return -1
+	}
+	return -1
+},
+}, []int{  /* Start-of-input transitions */  -1, -1,}, []int{  /* End-of-input transitions */  -1, -1,},nil},
+
+// ,
+{[]bool{false, true}, []func(rune) int{  // Transitions
+func(r rune) int {
+	switch(r) {
+		case 44: return 1
+	}
+	return -1
+},
+func(r rune) int {
+	switch(r) {
+		case 44: return -1
 	}
 	return -1
 },
@@ -436,18 +492,32 @@ func(r rune) int {
 },
 }, []int{  /* Start-of-input transitions */  -1, -1,}, []int{  /* End-of-input transitions */  -1, -1,},nil},
 
-// a
+// [ \t\n]
 {[]bool{false, true}, []func(rune) int{  // Transitions
 func(r rune) int {
 	switch(r) {
-		case 97: return 1
+		case 9: return 1
+		case 10: return 1
+		case 32: return 1
 	}
 	return -1
 },
 func(r rune) int {
 	switch(r) {
-		case 97: return -1
+		case 9: return -1
+		case 10: return -1
+		case 32: return -1
 	}
+	return -1
+},
+}, []int{  /* Start-of-input transitions */  -1, -1,}, []int{  /* End-of-input transitions */  -1, -1,},nil},
+
+// .
+{[]bool{false, true}, []func(rune) int{  // Transitions
+func(r rune) int {
+	return 1
+},
+func(r rune) int {
 	return -1
 },
 }, []int{  /* Start-of-input transitions */  -1, -1,}, []int{  /* End-of-input transitions */  -1, -1,},nil},
@@ -504,42 +574,48 @@ func (yylex Lexer) Error(e string) {
 // instead, the NN_FUN macro runs the lexer.
 func (yylex *Lexer) Lex(lval *yySymType) int {
 	if !yylex.stale {
-		{ println("BEGIN") }
+		{}
 	}
 	OUTER0:
 	for { switch yylex.next(0) {
 		case 0:
-			{println ("Comment Begin", yylex.Text()) }
+			{}
 		case 1:
-			{println ("String Literal", yylex.Text()) }
+			{}
 		case 2:
-			{println ("String Literal2", yylex.Text()) }
+			{}
 		case 3:
-			{println ("Array Start") }
+			{}
 		case 4:
-			{println ("Array End", yylex.Text()) }
+			{}
 		case 5:
-			{println ("Quotation Mark", yylex.Text()) }
+			{}
 		case 6:
-			{println ("Dictionary Element Equals") }
+			{}
 		case 7:
-			{println ("Dictionary Start") }
+			{}
 		case 8:
-			{println ("Dictionary End") }
+			{}
 		case 9:
-			{println ("Dictionary Element End") }
+			{}
 		case 10:
-			{ println("a") }
+			{}
+		case 11:
+			{}
+		case 12:
+			{}
+		case 13:
+			{}
 		default:
 			 break OUTER0
 		}
 		continue
 	}
 	yylex.pop()
-	{ println("END") }
+	{}
 	return 0
 }
-type yySymType struct { l, c int }
+type yySymType struct {l, c int}
 
 
 func main() {

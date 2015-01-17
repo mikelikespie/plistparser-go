@@ -1,0 +1,30 @@
+<      { println("BEGIN") }
+
+  /\/\*([^*]|\*[^\/])*\*\//  {println ("Comment Begin", yylex.Text()) }
+  /\"(\\.|[^\\"])*\"/ 	     {println ("String Literal", yylex.Text()) }
+  /([a-zA-Z0-9_$]|\\[fnrt])*/ 	     {println ("String Literal2", yylex.Text()) }
+
+  /\(/   {println ("Array Start") }
+  /\)/   {println ("Array End", yylex.Text()) }
+  /\"/   {println ("Quotation Mark", yylex.Text()) }
+  /=/    {println ("Dictionary Element Equals") }
+  /{/    {println ("Dictionary Start") }
+  /}/    {println ("Dictionary End") }
+  /;/    {println ("Dictionary Element End") }
+  /a/  { println("a") }
+>      { println("END") }
+//
+package main
+import ("fmt";"os")
+type yySymType struct { l, c int }
+
+
+func main() {
+  v := new(yySymType)
+
+  lex := NewLexer(os.Stdin)
+  fmt.Printf("%d %d\n", v.l, v.c)
+
+  lex.Lex(v)
+}
+

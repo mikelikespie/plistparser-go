@@ -46,7 +46,7 @@ const yyEofCode = 1
 const yyErrCode = 2
 const yyMaxDepth = 200
 
-//line gram.y:135
+//line gram.y:143
 
 //line yacctab:1
 var yyExca = []int{
@@ -55,59 +55,59 @@ var yyExca = []int{
 	-2, 0,
 }
 
-const yyNprod = 22
+const yyNprod = 24
 const yyPrivate = 57344
 
 var yyTokenNames []string
 var yyStates []string
 
-const yyLast = 48
+const yyLast = 44
 
 var yyAct = []int{
 
-	15, 2, 21, 3, 18, 7, 8, 10, 25, 9,
-	23, 11, 32, 22, 19, 28, 22, 7, 8, 29,
-	26, 19, 27, 30, 14, 1, 7, 8, 10, 31,
-	9, 12, 11, 7, 8, 10, 20, 9, 24, 11,
-	7, 8, 6, 16, 13, 4, 5, 17,
+	16, 2, 15, 22, 3, 19, 7, 8, 10, 25,
+	9, 12, 11, 33, 24, 20, 7, 8, 10, 28,
+	9, 23, 11, 20, 27, 30, 23, 29, 31, 32,
+	7, 8, 1, 26, 7, 8, 21, 17, 6, 13,
+	14, 4, 5, 18,
 }
 var yyPact = []int{
 
-	29, -1000, -1000, -1000, -1000, -1000, -1000, -1000, -1000, 22,
-	36, 11, -1000, 1, -1000, -6, -1000, 13, -1000, 3,
-	8, -1000, -1000, -1000, -1000, -1000, -1000, -1000, 29, -1000,
-	-1000, -1, -1000,
+	12, -1000, -1000, -1000, -1000, -1000, -1000, -1000, -1000, 2,
+	30, 21, -1000, 5, -5, -1000, -1000, -1000, 26, -1000,
+	7, 16, -1000, -1000, -1000, 12, -1000, -1000, 12, -1000,
+	-1000, -1000, 0, -1000,
 }
 var yyPgo = []int{
 
-	0, 4, 47, 46, 3, 45, 44, 0, 24, 42,
-	36, 2, 25,
+	0, 5, 43, 42, 4, 41, 40, 39, 0, 2,
+	38, 36, 3, 32,
 }
 var yyR1 = []int{
 
-	0, 12, 7, 7, 7, 7, 4, 4, 5, 5,
-	6, 6, 8, 3, 3, 2, 2, 1, 9, 11,
-	10, 10,
+	0, 13, 8, 8, 8, 8, 4, 4, 5, 5,
+	7, 7, 6, 6, 9, 3, 3, 2, 2, 1,
+	10, 12, 11, 11,
 }
 var yyR2 = []int{
 
 	0, 1, 1, 1, 1, 1, 1, 1, 2, 3,
-	1, 2, 2, 2, 3, 1, 2, 4, 3, 1,
-	1, 2,
+	1, 2, 1, 3, 1, 2, 3, 1, 2, 4,
+	3, 1, 1, 2,
 }
 var yyChk = []int{
 
-	-1000, -12, -7, -4, -5, -3, -9, 4, 5, 8,
-	6, 10, 9, -6, -8, -7, 7, -2, -1, -4,
-	-10, -11, 5, 9, -8, 14, 7, -1, 12, 11,
-	-11, -7, 13,
+	-1000, -13, -8, -4, -5, -3, -10, 4, 5, 8,
+	6, 10, 9, -7, -6, -9, -8, 7, -2, -1,
+	-4, -11, -12, 5, 9, 14, 7, -1, 12, 11,
+	-12, -9, -8, 13,
 }
 var yyDef = []int{
 
 	0, -2, 1, 2, 3, 4, 5, 6, 7, 0,
-	0, 0, 8, 0, 10, 0, 13, 0, 15, 0,
-	0, 20, 19, 9, 11, 12, 14, 16, 0, 18,
-	21, 0, 17,
+	0, 0, 8, 0, 10, 12, 14, 15, 0, 17,
+	0, 0, 22, 21, 9, 11, 16, 18, 0, 20,
+	23, 13, 0, 19,
 }
 var yyTok1 = []int{
 
@@ -407,52 +407,62 @@ yydefault:
 			yyVAL.array = yyS[yypt-1].array
 		}
 	case 10:
-		//line gram.y:77
+		//line gram.y:78
 		{
-			yyVAL.array = []interface{}{yyS[yypt-0].val}
+			yyVAL.array = yyS[yypt-0].array
 		}
 	case 11:
-		//line gram.y:80
+		//line gram.y:81
 		{
-			yyVAL.array = append(yyS[yypt-1].array, yyS[yypt-0].val)
+			yyVAL.array = yyS[yypt-1].array
 		}
 	case 12:
 		//line gram.y:85
 		{
-			yyVAL.val = yyS[yypt-1].val
+			yyVAL.array = []interface{}{yyS[yypt-0].val}
 		}
 	case 13:
-		//line gram.y:90
+		//line gram.y:88
 		{
-			yyVAL.pairs = map[string]interface{}{}
+			yyVAL.array = append(yyS[yypt-2].array, yyS[yypt-0].val)
 		}
 	case 14:
 		//line gram.y:93
 		{
-			yyVAL.pairs = yyS[yypt-1].pairs
+			yyVAL.val = yyS[yypt-0].val
 		}
 	case 15:
 		//line gram.y:98
 		{
-			yyVAL.pairs = map[string]interface{}{yyS[yypt-0].pair.key: yyS[yypt-0].pair.val}
+			yyVAL.pairs = map[string]interface{}{}
 		}
 	case 16:
 		//line gram.y:101
 		{
-			yyVAL.pairs[yyS[yypt-0].pair.key] = yyS[yypt-0].pair.val
+			yyVAL.pairs = yyS[yypt-1].pairs
 		}
 	case 17:
 		//line gram.y:106
 		{
-			yyVAL.pair.key, yyVAL.pair.val = yyS[yypt-3].str, yyS[yypt-1].val
+			yyVAL.pairs = map[string]interface{}{yyS[yypt-0].pair.key: yyS[yypt-0].pair.val}
 		}
 	case 18:
-		//line gram.y:111
+		//line gram.y:109
+		{
+			yyVAL.pairs[yyS[yypt-0].pair.key] = yyS[yypt-0].pair.val
+		}
+	case 19:
+		//line gram.y:114
+		{
+			yyVAL.pair.key, yyVAL.pair.val = yyS[yypt-3].str, yyS[yypt-1].val
+		}
+	case 20:
+		//line gram.y:119
 		{
 			yyVAL.data = yyS[yypt-1].data
 		}
-	case 19:
-		//line gram.y:115
+	case 21:
+		//line gram.y:123
 		{
 			var e error
 
@@ -464,13 +474,13 @@ yydefault:
 				yylex.Error("error decoding hex chunk" + e.Error())
 			}
 		}
-	case 20:
-		//line gram.y:126
+	case 22:
+		//line gram.y:134
 		{
 			yyVAL.data = yyS[yypt-0].data
 		}
-	case 21:
-		//line gram.y:130
+	case 23:
+		//line gram.y:138
 		{
 			yyVAL.data = append(yyS[yypt-1].data, yyS[yypt-0].data...)
 		}

@@ -19,7 +19,7 @@ func TestParse(t *testing.T) {
 	}
 }
 
-func TestSlases(t *testing.T) {
+func TestSlashes(t *testing.T) {
 	r, err := ParseString(`/abc`)
 	if err != nil {
 		t.Fatalf("Should have parsed, but got error %s", err)
@@ -27,6 +27,36 @@ func TestSlases(t *testing.T) {
 	switch r := r.(type) {
 	case string:
 		if r != `/abc` {
+			t.Errorf("expected valid string parse")
+		}
+	default:
+		t.Errorf("unexpected root type")
+	}
+}
+
+func TestArray1(t *testing.T) {
+	r, err := ParseString(`(abc)`)
+	if err != nil {
+		t.Fatalf("Should have parsed, but got error %s", err)
+	}
+	switch r := r.(type) {
+	case []interface{}:
+		if r[0] != `abc` {
+			t.Errorf("expected valid string parse")
+		}
+	default:
+		t.Errorf("unexpected root type")
+	}
+}
+
+func TestArray2(t *testing.T) {
+	r, err := ParseString(`(abc,)`)
+	if err != nil {
+		t.Fatalf("Should have parsed, but got error %s", err)
+	}
+	switch r := r.(type) {
+	case []interface{}:
+		if r[0] != `abc` {
 			t.Errorf("expected valid string parse")
 		}
 	default:
@@ -50,6 +80,20 @@ func TestErrors(t *testing.T) {
 	}
 
 	_, err = ParseString(`{abc b b=<aaaa bbbb>;}`)
+	if err == nil {
+		t.Errorf("expected error")
+	}
+
+	_, err = ParseString(`(a b)`)
+	if err == nil {
+		t.Errorf("expected error")
+	}
+
+	_, err = ParseString(`(a,, b)`)
+	if err == nil {
+		t.Errorf("expected error")
+	}
+	_, err = ParseString(`(a, b,,)`)
 	if err == nil {
 		t.Errorf("expected error")
 	}

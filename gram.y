@@ -31,7 +31,7 @@ import (
 
 %type <str> STRING, IDENT, String
 
-%type <array> Array ArrayElements 
+%type <array> Array ArrayElements  ArrayElementsMaybeWithComma
 %type <val> Value ArrayElement
 %type <data> Data DataChunks, DataChunk
 
@@ -69,20 +69,28 @@ String: STRING {
 Array: '(' ')' {
         $$ = []interface{} {}
      }
-     | '(' ArrayElements ')'  {
+     | '(' ArrayElementsMaybeWithComma ')'  {
         $$ = $2
      }
   ;
 
+
+ArrayElementsMaybeWithComma: ArrayElements {
+                              $$= $1
+                            } 
+                            | ArrayElements ',' {
+                              $$ = $1
+                            }
+
 ArrayElements: ArrayElement {
                $$ = []interface{} {$1}
              }
-             | ArrayElements ArrayElement{
-               $$ = append($1, $2)
+             | ArrayElements ',' ArrayElement {
+               $$ = append($1, $3)
              }
   ;
 
-ArrayElement: Value ',' {
+ArrayElement: Value {
             $$ = $1
             }
   ;

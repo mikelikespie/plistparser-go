@@ -67,7 +67,7 @@ state 8
 
 state 9
 	Array:  '('.')' 
-	Array:  '('.ArrayElements ')' 
+	Array:  '('.ArrayElementsMaybeWithComma ')' 
 
 	STRING  shift 7
 	IDENT  shift 8
@@ -80,9 +80,10 @@ state 9
 	Dict  goto 5
 	String  goto 3
 	Array  goto 4
-	ArrayElements  goto 13
-	Value  goto 15
-	ArrayElement  goto 14
+	ArrayElements  goto 14
+	ArrayElementsMaybeWithComma  goto 13
+	Value  goto 16
+	ArrayElement  goto 15
 	Data  goto 6
 
 state 10
@@ -91,21 +92,21 @@ state 10
 
 	STRING  shift 7
 	IDENT  shift 8
-	'}'  shift 16
+	'}'  shift 17
 	.  error
 
-	Pair  goto 18
-	Pairs  goto 17
-	String  goto 19
+	Pair  goto 19
+	Pairs  goto 18
+	String  goto 20
 
 state 11
 	Data:  '<'.DataChunks '>' 
 
-	IDENT  shift 22
+	IDENT  shift 23
 	.  error
 
-	DataChunks  goto 20
-	DataChunk  goto 21
+	DataChunks  goto 21
+	DataChunk  goto 22
 
 state 12
 	Array:  '(' ')'.    (8)
@@ -114,44 +115,40 @@ state 12
 
 
 state 13
-	Array:  '(' ArrayElements.')' 
-	ArrayElements:  ArrayElements.ArrayElement 
+	Array:  '(' ArrayElementsMaybeWithComma.')' 
 
-	STRING  shift 7
-	IDENT  shift 8
-	'{'  shift 10
-	'('  shift 9
-	')'  shift 23
-	'<'  shift 11
+	')'  shift 24
 	.  error
 
-	Dict  goto 5
-	String  goto 3
-	Array  goto 4
-	Value  goto 15
-	ArrayElement  goto 24
-	Data  goto 6
 
 state 14
-	ArrayElements:  ArrayElement.    (10)
+	ArrayElementsMaybeWithComma:  ArrayElements.    (10)
+	ArrayElementsMaybeWithComma:  ArrayElements.',' 
+	ArrayElements:  ArrayElements.',' ArrayElement 
 
-	.  reduce 10 (src line 77)
+	','  shift 25
+	.  reduce 10 (src line 78)
 
 
 state 15
-	ArrayElement:  Value.',' 
+	ArrayElements:  ArrayElement.    (12)
 
-	','  shift 25
-	.  error
+	.  reduce 12 (src line 85)
 
 
 state 16
-	Dict:  '{' '}'.    (13)
+	ArrayElement:  Value.    (14)
 
-	.  reduce 13 (src line 90)
+	.  reduce 14 (src line 93)
 
 
 state 17
+	Dict:  '{' '}'.    (15)
+
+	.  reduce 15 (src line 98)
+
+
+state 18
 	Dict:  '{' Pairs.'}' 
 	Pairs:  Pairs.Pair 
 
@@ -161,71 +158,77 @@ state 17
 	.  error
 
 	Pair  goto 27
-	String  goto 19
-
-state 18
-	Pairs:  Pair.    (15)
-
-	.  reduce 15 (src line 98)
-
+	String  goto 20
 
 state 19
+	Pairs:  Pair.    (17)
+
+	.  reduce 17 (src line 106)
+
+
+state 20
 	Pair:  String.'=' Value ';' 
 
 	'='  shift 28
 	.  error
 
 
-state 20
+state 21
 	Data:  '<' DataChunks.'>' 
 	DataChunks:  DataChunks.DataChunk 
 
-	IDENT  shift 22
+	IDENT  shift 23
 	'>'  shift 29
 	.  error
 
 	DataChunk  goto 30
 
-state 21
-	DataChunks:  DataChunk.    (20)
-
-	.  reduce 20 (src line 126)
-
-
 state 22
-	DataChunk:  IDENT.    (19)
+	DataChunks:  DataChunk.    (22)
 
-	.  reduce 19 (src line 115)
+	.  reduce 22 (src line 134)
 
 
 state 23
-	Array:  '(' ArrayElements ')'.    (9)
+	DataChunk:  IDENT.    (21)
+
+	.  reduce 21 (src line 123)
+
+
+state 24
+	Array:  '(' ArrayElementsMaybeWithComma ')'.    (9)
 
 	.  reduce 9 (src line 72)
 
 
-state 24
-	ArrayElements:  ArrayElements ArrayElement.    (11)
-
-	.  reduce 11 (src line 80)
-
-
 state 25
-	ArrayElement:  Value ','.    (12)
+	ArrayElementsMaybeWithComma:  ArrayElements ','.    (11)
+	ArrayElements:  ArrayElements ','.ArrayElement 
 
-	.  reduce 12 (src line 85)
+	STRING  shift 7
+	IDENT  shift 8
+	'{'  shift 10
+	'('  shift 9
+	'<'  shift 11
+	.  reduce 11 (src line 81)
 
+	Dict  goto 5
+	String  goto 3
+	Array  goto 4
+	Value  goto 16
+	ArrayElement  goto 31
+	Data  goto 6
 
 state 26
-	Dict:  '{' Pairs '}'.    (14)
+	Dict:  '{' Pairs '}'.    (16)
 
-	.  reduce 14 (src line 93)
+	.  reduce 16 (src line 101)
 
 
 state 27
-	Pairs:  Pairs Pair.    (16)
+	Pairs:  Pairs Pair.    (18)
 
-	.  reduce 16 (src line 101)
+	.  reduce 18 (src line 109)
 
 
 state 28
@@ -241,43 +244,49 @@ state 28
 	Dict  goto 5
 	String  goto 3
 	Array  goto 4
-	Value  goto 31
+	Value  goto 32
 	Data  goto 6
 
 state 29
-	Data:  '<' DataChunks '>'.    (18)
+	Data:  '<' DataChunks '>'.    (20)
 
-	.  reduce 18 (src line 111)
+	.  reduce 20 (src line 119)
 
 
 state 30
-	DataChunks:  DataChunks DataChunk.    (21)
+	DataChunks:  DataChunks DataChunk.    (23)
 
-	.  reduce 21 (src line 129)
+	.  reduce 23 (src line 137)
 
 
 state 31
-	Pair:  String '=' Value.';' 
+	ArrayElements:  ArrayElements ',' ArrayElement.    (13)
 
-	';'  shift 32
-	.  error
+	.  reduce 13 (src line 88)
 
 
 state 32
-	Pair:  String '=' Value ';'.    (17)
+	Pair:  String '=' Value.';' 
 
-	.  reduce 17 (src line 106)
+	';'  shift 33
+	.  error
 
 
-14 terminals, 13 nonterminals
-22 grammar rules, 33/2000 states
+state 33
+	Pair:  String '=' Value ';'.    (19)
+
+	.  reduce 19 (src line 114)
+
+
+14 terminals, 14 nonterminals
+24 grammar rules, 34/2000 states
 0 shift/reduce, 0 reduce/reduce conflicts reported
-62 working sets used
+63 working sets used
 memory: parser 38/30000
 17 extra closures
 34 shift entries, 1 exceptions
-19 goto entries
+20 goto entries
 13 entries saved by goto default
-Optimizer space used: output 48/30000
-48 table entries, 0 zero
+Optimizer space used: output 44/30000
+44 table entries, 0 zero
 maximum spread: 14, maximum offset: 28

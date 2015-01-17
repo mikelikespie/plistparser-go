@@ -73,12 +73,11 @@ func (l *lexer) Lex(lval *yySymType) (tok int) {
 		case '/':
 			accumulatedText += "/"
 			peeked := l.s.Peek()
-			if peeked == '/' || isIdent(peeked, 1) {
+			if isIdent(peeked, 1) {
 				continue
 			} else {
 				tok = IDENT
 				lval.str = accumulatedText
-				println(lval.str, scanner.TokenString(l.s.Peek()))
 				return
 			}
 		case '(', ')', '{', ';', '}', '=', ',', '<', '>':

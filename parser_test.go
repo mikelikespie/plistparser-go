@@ -32,6 +32,19 @@ func TestSlashes(t *testing.T) {
 	default:
 		t.Errorf("unexpected root type")
 	}
+
+	r, err = ParseString(`/`)
+	if err != nil {
+		t.Fatalf("Should have parsed, but got error %s", err)
+	}
+	switch r := r.(type) {
+	case string:
+		if r != `/` {
+			t.Errorf("expected valid string parse")
+		}
+	default:
+		t.Errorf("unexpected root type")
+	}
 }
 
 func TestArray1(t *testing.T) {

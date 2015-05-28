@@ -9,6 +9,7 @@ import (
 	"text/scanner"
 )
 
+// Returns true if the character is an identifier
 func isIdent(ch rune, i int) bool {
 	if ch >= 'a' && ch <= 'z' {
 		return true
@@ -103,7 +104,7 @@ func prettyPrint(v interface{}, indentLevel int) {
 	case string:
 		fmt.Print(strconv.Quote(v))
 	case []interface{}:
-		fmt.Printf("[\n")
+		fmt.Printf("(\n")
 		for _, val := range v {
 			printIndent(1)
 
@@ -111,7 +112,7 @@ func prettyPrint(v interface{}, indentLevel int) {
 			fmt.Printf(",\n")
 		}
 		printIndent(0)
-		fmt.Printf("]")
+		fmt.Printf(")")
 
 	case map[string]interface{}:
 		fmt.Printf("{\n")
